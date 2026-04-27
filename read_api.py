@@ -1,51 +1,103 @@
-from flask import Flask, jsonify, request, abort
+
+
+from tracemalloc import start
+
+from flask import Flask, jsonify, request
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+from datetime import datetime, timedelta, timezone
+from flask_cors import CORS, cross_origin
+import webbrowser
+import os
+
+ENDPOINT = "http://127.0.0.1:5000"
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
+@cross_origin(supports_credentials=True)
 
-def _extract_body_as_string(req):
-    # Try JSON first (if the client sent a raw JSON string it will come here).
-    if req.is_json:
-        payload = req.get_json(silent=True)
-        # If payload is a JSON string, return it; otherwise return the whole payload
-        return payload if isinstance(payload, str) else payload
-    # Fallback to raw body text
-    data = req.get_data(as_text=True)
-    return data if data else None
+@app.route('/api/hello_api',methods=['GET'])
+def hello():
+    return jsonify("message=Hello world restapi"),200
 
-# GET /api/values
-@app.route('/api/values', methods=['GET'])
-def get_values():
-    # Mimic the original C# return: new string[] { "value1", "value2" }
-    return jsonify(["value1", "value2"])
+# MongoDB connection
+client = MongoClient('mongodb+srv://talashdrive:talashdrive@cluster1.7xzdzgk.mongodb.net/', serverSelectionTimeoutMS=1000)
+db = client['ample_mflix']
+collection = db['playlists']
 
-# GET /api/values/<id>
-@app.route('/api/values/<int:id>', methods=['GET'])
-def get_value(id):
-    # Mimic the original C# return: "value"
-    return jsonify("value")
+@app.route('/health', methods=['GET'])
+def health_check():
+    try:
+        client.admin.command('ping')
+        return jsonify({"status": "MongoDB is connected"}), 200
+    except Exception as e:
+        return jsonify({"status": "Connection failed", "error": str(e)}), 500
 
-# POST /api/values
-@app.route('/api/values', methods=['POST'])
-def post_value():
-    value = _extract_body_as_string(request)
-    # No storage implemented — mirror original empty method.
-    # Return 201 Created to indicate resource accepted (adjust as needed).
-    return ('', 201)
+@app.route('/count', methods=['GET'])
+def get_count():
+    try:
+        count = collection.count_documents({})
+        return jsonify({"total_documents": count}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# PUT /api/values/<id>
-@app.route('/api/values/<int:id>', methods=['PUT'])
-def put_value(id):
-    value = _extract_body_as_string(request)
-    # No storage implemented — mirror original empty method.
-    # Return 204 No Content to indicate success with no body.
-    return ('', 204)
+@app.route('/count/recent', methods=['GET'])
+def get_recent_count():
+    try:
+        num_access =[]
+        time=[]
+        end = datetime.now(timezone.utc)
+        for i in range(24):
+            twenty_four_hours_ago = datetime.now(timezone.utc) - timedelta(hours=i) 
+            start = twenty_four_hours_ago
+            time.append( twenty_four_hours_ago.strftime("%H:%M:%S"))
+            #print(time)
+            object_id_24h_ago = ObjectId.from_datetime(twenty_four_hours_ago)
+            #query = {"_id": {"$gt": object_id_24h_ago}}  
+            query = {"_id": {
+                            "$gte": ObjectId.from_datetime(start),
+                              "$lt": ObjectId.from_datetime(end)
+                            }
+                    }     
+            filtered_count = collection.count_documents(query)
+            num_access.append(filtered_count)
+            
+            end = start
+       
+        return jsonify({"documents_last_24h": num_access},{"time": time}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# DELETE /api/values/<id>
-@app.route('/api/values/<int:id>', methods=['DELETE'])
-def delete_value(id):
-    # No deletion logic implemented — mirror original empty method.
-    return ('', 204)
+@app.route('/document/<id>', methods=['GET'])
+def get_document(id):
+    try:
+        document_id = ObjectId(id)
+        document = collection.find_one({"_id": document_id})
+        if document:
+            # Convert ObjectId to string for JSON serialization
+            document['_id'] = str(document['_id'])
+            return jsonify(document), 200
+        else:
+            return jsonify({"error": "Document not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/documents', methods=['GET'])
+def get_documents():
+    try:
+        limit = int(request.args.get('limit', 10))
+        documents = list(collection.find().limit(limit))
+        for doc in documents:
+            doc['_id'] = str(doc['_id'])
+        return jsonify(documents),200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
-    # For development only. In production use a WSGI server (gunicorn/uwsgi).
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    
+    app.run(debug=True)
+    
+
+    
+
