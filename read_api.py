@@ -10,7 +10,6 @@ from flask_cors import CORS, cross_origin
 import webbrowser
 import os
 
-ENDPOINT = "http://127.0.0.1:5000"
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
