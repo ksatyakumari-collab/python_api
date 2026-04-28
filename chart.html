@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data Chart</title>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=2JGxpVvLmOR_6ERkCQ8M5DybkJehtsOHYTavDA8GhQ_32ynXy8X3p-ApDz_c89IvlWYTvcVfvHo9dp8lpqOw2YagySJlUuhRq_RwZZOFU2k7yvfTUXr7-WjXRQGRTuXIwOpvTF-uCJ7N8qdwgd6uqEPcn7Mno15gUz3Sd8DlQzoaCO_l_42zWwWQfy2oP0bWmbFF1uG2nhuDLIifPRVzgUL97CtMvchSRHhpBCzHa-fe485ccDSdSZxR10yhnuQDX_ykwwkS3StkdfdL_qx5iGhSETHMaCqv76Brt1Vx7U_42MimS-vth7PSFdaJw87zU0rkJ_koaqp8vrZg4A0KniQ7onhGIVeyb18V5w2fNDTAXoIhW_lO6x0IqlDYHWxmX9dRrzYdWgoKozm91F-6BvvTkLsOccgKlJ9_jmHqJIVy6DGFMlAvJAbQ-6b-c5QgLeuAkCaMPKBxSnFWajB3l7GbRa1qkeq3albJ4GTrUxolEPGYdvmFFUtwRTb2pBPIgW6T88kqgH38hx3_GA07rqw6Tj5V6ncoCeFNYOXxUj-JEs7rk4RY57554loveo3mQwiMSFJllvg0-1NvnbtxvZMBDt8J0J_9Ht35SjVuobn2yvBpUK-eaFTnCDv1iJU6VF3DPRtr_S4Lwodu6ZQrqy1faOBmMgXvTZ5wuRRtuIHpKh8rLnjLJ8lAkHB3tvtkbB1rdUipxWJKhvziW5yb9Dk9trW2xE1mIwRTS6FaraUUKdJ9b2FcpWX0E_xL-DFIJXVRsU-Xp9P9k7OV07nMHNl1-NepWKyICUWAt_gClhFJp6-XZ6rZ0pOnzt9-uG8ykvdV5Ssk7CWnL0HUZCttwYJ6Xzg1GBaI75SMIXW1xK8Uk76OAJ0RyDzzEDzx1vKxnMfmhpXC1lfq4-LJkMsr_kF78ckI06kdPfW_fMa_71ljXpWPFqYMKyKmfhF0vT3OSTX_I6rjhfvAXwFyYdijihBWQcoYvvwBZ9FCVA8djS432ouwhJsdqMPPWjVkdYPwNXcaRGsuY71ErLVJ63VHHfWcXMn4z8T1RX-xkmYxDmsL3Huj6P2MqVUXzrDdHO9E2WxAagLvm3TpGIwS2n0-H7PIqepzNZAVIMhB9hOS0pSZnMacZQL3G-oQ6x4lW_WrkUYv3JMMOsNMKxj_ViV1Jy4PobrfTKBNHpg03Uz2pq32VOjoJymlyyoruGDlU5CF_QvMj4dWaX2XY_Dim0c_Mo03vMZi1FPJnsrE-vSnu5rNwE_KkttIsm5iFbAT46pxKJaFx1L6W7G5KjCGseuFuwPBUQ5rKlDzh_MSuiZYRsedy-9BCBBL4wCctA5kItoJxUZBcnIIxfd4jpP2xAbN54-OAALSNQtie2ltyac6Dvt1Ct-lnTED_t8Sb8od0dLY4_8OaQ55r2DWLo74iJgI7FCmp6fDR9rW920tPlo5eja3f1FxQ9cBGx0vozJvjV4uuat5H9c2AWspw5zFgL2WTEkbZn563GfHccJg0tKMVQHhzSywHJnExQKWbbQlSDhEa4NdQRfeEzAkxjAeYu6cvZS_zHJ5o0zvxxI-fKPFelygUxrRl2odWjO_ZFMDkFqtMSyPl605cOBjKaB3e1PgMm91ogFNLzH50av0oj2Bpp_mx_0YHP4wioRGpWs6oT-BEqBxuqFMemjRZW2rtd0b4g" nonce="3367c7130d63ffb22c390c42ead52b3c" charset="UTF-8"></script><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        canvas {
+            max-width: 100%;
+        }
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.loading {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        .status.success {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        .status.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Document Access Chart (Last 24 Hours)</h1>
+        <div id="status" class="status loading">Loading data...</div>
+        <div class="chart-wrapper">
+            <canvas id="accessChart"></canvas>
+        </div>
+        <button onclick="fetchAndDrawChart()">Refresh Data</button>
+    </div>
+
+    <script>
+        let chart = null;
+
+        function fetchAndDrawChart() {
+            const statusDiv = $('#status');
+            statusDiv.removeClass('success error').addClass('loading').text('Loading data...');
+
+            $.ajax({
+                url: 'http://localhost:5000/count/recent',
+                method: 'GET',
+                data: {type: 'hour'},
+                dataType: 'json',
+                crossDomain: true,
+                success: function(response) {
+                    statusDiv.removeClass('loading error').addClass('success').text('✓ Data loaded successfully');
+                    drawChart(response.data);
+                },
+                error: function(xhr, status, error) {
+                    statusDiv.removeClass('loading success').addClass('error')
+                        .text(`✗ Error: ${error}. Make sure the API is running on http://localhost:5000`);
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
+        function drawChart(data) {
+            // Extract times and counts
+            const times = data.map(item => item.time);
+            const counts = data.map(item => item.count);
+
+            // Destroy previous chart if it exists
+            if (chart) {
+                chart.destroy();
+            }
+
+            // Create new chart
+            const ctx = document.getElementById('accessChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: times,
+                    datasets: [{
+                        label: 'Document Access Count',
+                        data: counts,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 7,
+                        pointHoverBackgroundColor: '#764ba2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: 15
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Documents Accessed in Last 24 Hours',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time (HH:MM:SS)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load chart on page load
+        $(document).ready(function() {
+            fetchAndDrawChart();
+        });
+    </script>
+</body>
+</html>
