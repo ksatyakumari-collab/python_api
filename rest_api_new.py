@@ -42,6 +42,30 @@ def get_count():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/top_10', methods=['GET'])
+def get_top_10():
+    try:
+        result = collection.find(
+        {},                      # no filter (all documents)
+        {"_id": 1, "likes": 1}   # project only _id and likes
+        ).sort("likes", -1).limit(10)
+
+        id_list = []
+        likes_list = []
+    
+        for doc in result:
+            doc['_id'] = str(doc['_id'])
+            id_list.append(doc['_id'])
+            likes_list.append(doc['likes'])            
+            print("decending order list :",doc['_id'], doc['likes'])
+            
+        data = [{"id": t, "likes": c} for t, c in zip(id_list, likes_list)]
+
+        return jsonify(data), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/count/recent', methods=['GET'])
 def get_recent_count():
     try:
