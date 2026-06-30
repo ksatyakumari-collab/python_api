@@ -31,3 +31,14 @@ steps:
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
+# Archive project
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: zip
+    archiveFile: '$(Build.ArtifactStagingDirectory)/pythonapp.zip'
+    replaceExistingArchive: true
+# Publish artifact
+- publish: '$(Build.ArtifactStagingDirectory)/pythonapp.zip'
+  artifact: pythonapp
