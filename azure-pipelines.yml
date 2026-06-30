@@ -33,7 +33,7 @@ stages:
             displayName: Deploy to Azure Web App
 
             inputs:
-              azureSubscription: 'Azure-Service-Connection'
+              azureSubscription: 'Azure subscription 1(9e6cc00a-2a6b-4596-b517-7ab2de7df8ea)'
               appType: 'webAppLinux'
-              appName: 'python-webapp-demo'
+              appName: 'restapiSatya'
               package: '$(Pipeline.Workspace)/pythonapp/pythonapp.zip'
