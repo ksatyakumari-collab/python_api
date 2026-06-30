@@ -30,17 +30,8 @@ steps:
     python -m pip install --upgrade pip
     pip install -r requirements.txt
   displayName: 'Install dependencies'
-
-# Archive project
-- task: ArchiveFiles@2
+- task: PublishBuildArtifacts@1
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)'
-    
-    includeRootFolder: false
-    archiveType: zip
-    archiveFile: '$(Build.ArtifactStagingDirectory)/pythonapp1.zip'
-
-    replaceExistingArchive: true
-#  Publish artifact
-- publish: '$(Build.ArtifactStagingDirectory)/pythonapp1.zip'
-  artifact: pythonapp1
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
