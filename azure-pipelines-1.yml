@@ -30,14 +30,8 @@ steps:
     python -m pip install --upgrade pip
     pip install -r requirements.txt
   displayName: 'Install dependencies'
-- task: DotNetCoreCLI@2
-  inputs:
-      command: 'publish'
-      publishWebProjects: true
-      arguments: '--configuration Release --output $(pipeline.workspace.drop)'
-
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(pipeline.workspace.drop)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
