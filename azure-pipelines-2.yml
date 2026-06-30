@@ -1,0 +1,39 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+
+- stage: Deploy
+  displayName: Deploy Python Application
+
+  jobs:
+
+  - deployment: DeployToAzure
+
+    displayName: Deploy to Azure App Service
+
+    environment: Production
+
+    strategy:
+
+      runOnce:
+
+        deploy:
+
+          steps:
+
+          # Download the artifact published by the build stage
+          - download: current
+            artifact: pythonapp
+
+          # Deploy to Azure Web App
+          - task: AzureWebApp@1
+            displayName: Deploy to Azure Web App
+
+            inputs:
+              azureSubscription: 'Azure subscription 1'
+              appType: 'webAppLinux'
+              appName: 'restapiSatya'
+              package: '$(Pipeline.Workspace)/pythonapp/pythonapp.zip'
