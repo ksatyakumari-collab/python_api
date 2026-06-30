@@ -39,6 +39,7 @@ steps:
     includeRootFolder: false
     archiveType: zip
     archiveFile: '$(Build.ArtifactStagingDirectory)/pythonapp1.zip'
+
     replaceExistingArchive: true
 #  Publish artifact
 - publish: '$(Build.ArtifactStagingDirectory)/pythonapp1.zip'
