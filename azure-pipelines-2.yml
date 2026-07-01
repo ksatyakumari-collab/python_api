@@ -25,7 +25,7 @@ stages:
           steps:
 
           # Download the artifact published by the build stage
-          - download: current
+          - download: $(Build.ArtifactStagingDirectory)
             artifact: pythonapp
 
           # Deploy to Azure Web App
