@@ -36,4 +36,4 @@ stages:
               azureSubscription: 'Azure subscription 1'
               appType: 'webAppLinux'
               appName: 'restapiSatya'
-              package: '$(Pipeline.Workspace)/pythonapp/pythonapp.zip'
+              package: '$(Build.ArtifactStagingDirectory)/pythonapp.zip'
