@@ -294,7 +294,7 @@ def get_documents():
 
 
 if __name__ == '__main__':
-    
+    print("main function call")
     app.run(debug=True)
     
 
