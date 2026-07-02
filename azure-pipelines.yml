@@ -44,3 +44,14 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: AzureRmWebAppDeployment@5
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(9e6cc00a-2a6b-4596-b517-7ab2de7df8ea)'
+    appType: 'webAppLinux'
+    WebAppName: 'RestApiNew'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    RuntimeStack: 'PYTHON|3.13'
+    StartupCommand: 'Python RestApiProject'
+    DeploymentTypeLinux: 'oneDeploy'
